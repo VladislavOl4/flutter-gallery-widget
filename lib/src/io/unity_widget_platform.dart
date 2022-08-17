@@ -95,6 +95,12 @@ abstract class UnityWidgetPlatform extends PlatformInterface {
     throw UnimplementedError('onUnityMessage() has not been implemented.');
   }
 
+  Stream<UnityOrientationChangeEvent> onOrientationChange({
+    required int unityId,
+  }) {
+    throw UnimplementedError('onOrientationChange() has not been implemented.');
+  }
+
   Stream<UnityLoadedEvent> onUnityUnloaded({required int unityId}) {
     throw UnimplementedError('onUnityUnloaded() has not been implemented.');
   }

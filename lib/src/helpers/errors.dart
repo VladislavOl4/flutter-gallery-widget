@@ -1,5 +1,3 @@
-import 'package:flutter_unity_widget/src/helpers/types.dart';
-
 /// Error thrown when an unknown unity ID is provided to a method channel API.
 class UnknownUnityIDError extends Error {
   /// Creates an assertion error with the provided [unityId] and optional
@@ -19,9 +17,3 @@ class UnknownUnityIDError extends Error {
     return "Unknown unity ID $unityId";
   }
 }
-
-typedef void UnityMessageCallback(dynamic handler);
-
-typedef void UnitySceneChangeCallback(SceneLoaded? message);
-
-typedef void UnityUnloadCallback();

@@ -1,4 +1,4 @@
-import 'package:flutter_unity_widget/src/helpers/types.dart';
+import 'package:flutter_unity_widget/src/helpers/scene_loaded.dart';
 
 class UnityEvent<T> {
   /// The ID of the Unity this event is associated to.
@@ -33,4 +33,14 @@ class UnityCreatedEvent extends UnityEvent<void> {
 
 class UnityMessageEvent extends UnityEvent<dynamic> {
   UnityMessageEvent(int unityId, dynamic value) : super(unityId, value);
+}
+
+class UnityOrientationChangeEvent extends UnityEvent<dynamic> {
+  UnityOrientationChangeEvent(
+    int unityId,
+    dynamic value,
+  ) : super(
+          unityId,
+          value,
+        );
 }
