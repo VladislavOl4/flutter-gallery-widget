@@ -5,7 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../facade_controller.dart';
-import '../helpers/misc.dart';
+import '../helpers/types.dart';
 import 'device_method.dart';
 import 'mobile_unity_widget_controller.dart';
 import 'unity_widget_platform.dart';

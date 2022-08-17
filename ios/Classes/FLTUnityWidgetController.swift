@@ -8,13 +8,14 @@
 import Foundation
 import UnityFramework
 
+// TODO add handler
 // Defines unity controllable from Flutter.
 public class FLTUnityWidgetController: NSObject, FLTUnityOptionsSink, FlutterPlatformView {
     private var _rootView: FLTUnityView
     private var viewId: Int64 = 0
     private var channel: FlutterMethodChannel?
     private weak var registrar: (NSObjectProtocol & FlutterPluginRegistrar)?
-    
+
     private var _disposed = false
 
     init(
@@ -146,21 +147,21 @@ public class FLTUnityWidgetController: NSObject, FLTUnityOptionsSink, FlutterPla
 
         channel?.setMethodCallHandler(nil)
         removeViewIfNeeded()
-        
+
         _disposed = true
     }
-    
+
     /// Handles messages from unity in the current view
     func handleMessage(message: String) {
         self.channel?.invokeMethod("events#onUnityMessage", arguments: message)
     }
-    
-    
+
+
     /// Handles scene changed event from unity in the current view
     func handleSceneChangeEvent(info: Dictionary<String, Any>) {
         self.channel?.invokeMethod("events#onUnitySceneLoaded", arguments: info)
     }
-    
+
     /// Post messages to unity from flutter
     func postMessage(call: FlutterMethodCall, result: FlutterResult) {
         guard let args = call.arguments else {

@@ -9,11 +9,11 @@ import 'package:flutter/services.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../helpers/events.dart';
-import '../helpers/misc.dart';
-import '../helpers/types.dart';
+import '../helpers/errors.dart';
+import '../helpers/scene_loaded.dart';
 import 'unity_widget_platform.dart';
-import 'windows_unity_widget_view.dart';
 
+// TODO add method to controller
 class MethodChannelUnityWidget extends UnityWidgetPlatform {
   // Every method call passes the int unityId
   late final Map<int, MethodChannel> _channels = {};
@@ -164,24 +164,7 @@ class MethodChannelUnityWidget extends UnityWidgetPlatform {
 
     final Map<String, dynamic> creationParams = unityOptions;
 
-    if (defaultTargetPlatform == TargetPlatform.windows) {
-      return WindowsUnityWidgetView();
-    }
-
     if (defaultTargetPlatform == TargetPlatform.android) {
-      // commented for 3.0.0 changes in platform view rendition
-      // if (!useAndroidViewSurface) {
-      //   return AndroidView(
-      //     viewType: _viewType,
-      //     onPlatformViewCreated: onPlatformViewCreated,
-      //     gestureRecognizers: gestureRecognizers,
-      //     creationParams: creationParams,
-      //     creationParamsCodec: const StandardMessageCodec(),
-      //     hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-      //     layoutDirection: TextDirection.ltr,
-      //   );
-      // }
-
       return PlatformViewLink(
         viewType: _viewType,
         surfaceFactory: (

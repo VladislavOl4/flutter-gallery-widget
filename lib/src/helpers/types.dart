@@ -1,31 +1,9 @@
-class SceneLoaded {
-  final String? name;
-  final int? buildIndex;
-  final bool? isLoaded;
-  final bool? isValid;
+import 'package:flutter_unity_widget/src/helpers/scene_loaded.dart';
+import 'package:flutter_unity_widget/src/facade_controller.dart';
 
-  SceneLoaded({this.name, this.buildIndex, this.isLoaded, this.isValid});
-
-  /// Mainly for internal use when calling [CameraUpdate.newCameraPosition].
-  dynamic toMap() => <String, dynamic>{
-        'name': name,
-        'buildIndex': buildIndex,
-        'isLoaded': isLoaded,
-        'isValid': isValid,
-      };
-
-  /// Deserializes [SceneLoaded] from a map.
-  ///
-  /// Mainly for internal use.
-  static SceneLoaded? fromMap(dynamic json) {
-    if (json == null) {
-      return null;
-    }
-    return SceneLoaded(
-      name: json['name'],
-      buildIndex: json['buildIndex'],
-      isLoaded: json['isLoaded'],
-      isValid: json['isValid'],
-    );
-  }
-}
+typedef void UnityCreatedCallback(UnityWidgetController controller);
+typedef void UnityMessageCallback(dynamic handler);
+typedef void UnityOrientationChangeCallback(dynamic handler);
+typedef void GalleryIsReadyCallback(dynamic handler);
+typedef void UnitySceneChangeCallback(SceneLoaded? message);
+typedef void UnityUnloadCallback();

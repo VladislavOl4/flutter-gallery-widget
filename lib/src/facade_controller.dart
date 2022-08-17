@@ -1,5 +1,3 @@
-typedef void UnityCreatedCallback(UnityWidgetController controller);
-
 abstract class UnityWidgetController {
   static dynamic webRegistrar;
 

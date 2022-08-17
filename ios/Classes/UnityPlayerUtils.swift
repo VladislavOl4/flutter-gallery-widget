@@ -8,6 +8,8 @@
 import Foundation
 import UnityFramework
 
+
+// TODO add handler
 private var unity_warmed_up = false
 // Hack to work around iOS SDK 4.3 linker problem
 // we need at least one __TEXT, __const section entry in main application .o files

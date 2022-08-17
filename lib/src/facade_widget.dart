@@ -1,14 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter_unity_widget/src/facade_controller.dart';
 
-import 'helpers/misc.dart';
+import 'helpers/types.dart';
 
 class UnityWidget extends StatefulWidget {
   UnityWidget({
     Key? key,
     required this.onUnityCreated,
+    required this.onUnityOrientationChange,
+    required this.onGalleryIsReady,
     this.onUnityMessage,
     this.fullscreen = false,
     this.enablePlaceholder = false,
@@ -28,6 +29,11 @@ class UnityWidget extends StatefulWidget {
 
   ///Event fires when the unity player is created.
   final UnityCreatedCallback onUnityCreated;
+
+  ///Event fires when the unity changes the orientation. Possible options are Portrait and LandscapeRight
+  final UnityOrientationChangeCallback onUnityOrientationChange;
+
+  final GalleryIsReadyCallback onGalleryIsReady;
 
   ///Event fires when the [UnityWidget] gets a message from unity.
   final UnityMessageCallback? onUnityMessage;
