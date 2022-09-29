@@ -85,6 +85,14 @@ class UnityPlayerUtils {
             UnityPlayer.UnitySendMessage(gameObject, methodName, message)
         }
 
+        fun sneakersDidLoad(message: String) {
+            UnityPlayer.UnitySendMessage("__FlutterInitializerActor", "SneakersDataLoaded", message)
+        }
+
+        fun galleryProfileDidLoad(message: String) {
+            UnityPlayer.UnitySendMessage("__FlutterInitializerActor", "GalleryProfileDataLoaded", message)
+        }
+
         fun pause() {
             try {
                 if (unityPlayer != null) {
@@ -152,6 +160,20 @@ class UnityPlayerUtils {
             for (listener in mUnityEventListeners) {
                 try {
                     listener.onMessage(message)
+                } catch (e: Exception) {
+                    e.message?.let { Log.e(LOG_TAG, it) }
+                }
+            }
+        }
+
+        /**
+         * Invoke by unity C#
+         */
+        @JvmStatic
+        fun onUnityGalleryStateChange(message: String) {
+            for (listener in mUnityEventListeners) {
+                try {
+                    listener.onUnityGalleryStateChange(message)
                 } catch (e: Exception) {
                     e.message?.let { Log.e(LOG_TAG, it) }
                 }

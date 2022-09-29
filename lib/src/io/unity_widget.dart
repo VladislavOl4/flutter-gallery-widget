@@ -4,11 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../facade_controller.dart';
-import '../helpers/misc.dart';
+import '../abstract_classes/facade_controller.dart';
+import '../helpers/types.dart';
 import 'device_method.dart';
 import 'mobile_unity_widget_controller.dart';
-import 'unity_widget_platform.dart';
+import '../abstract_classes/facade_platform.dart';
+import '../io/unity_widget_platform.dart';
 
 int _nextUnityCreationId = 0;
 
@@ -24,7 +25,7 @@ class AndroidUnityWidgetFlutter {
   ///
   /// Defaults to true.
   static bool get useAndroidViewSurface {
-    final UnityWidgetPlatform platform = UnityWidgetPlatform.instance;
+    final UnityWidgetPlatform platform = WidgetPlatform.instance;
     if (platform is MethodChannelUnityWidget) {
       return platform.useAndroidViewSurface;
     }
@@ -41,7 +42,7 @@ class AndroidUnityWidgetFlutter {
   ///
   /// Defaults to true.
   static set useAndroidViewSurface(bool useAndroidViewSurface) {
-    final UnityWidgetPlatform platform = UnityWidgetPlatform.instance;
+    final UnityWidgetPlatform platform = WidgetPlatform.instance;
     if (platform is MethodChannelUnityWidget) {
       platform.useAndroidViewSurface = useAndroidViewSurface;
     }
@@ -54,6 +55,7 @@ class UnityWidget extends StatefulWidget {
   UnityWidget({
     Key? key,
     required this.onUnityCreated,
+    this.onUnityGalleryStateChange,
     this.onUnityMessage,
     this.fullscreen = false,
     this.enablePlaceholder = false,
@@ -74,6 +76,9 @@ class UnityWidget extends StatefulWidget {
 
   ///Event fires when the unity player is created.
   final UnityCreatedCallback onUnityCreated;
+
+  ///Event fires when the unity changes the orientation. Possible options are Portrait and LandscapeRight
+  final UnityGalleryStateChangeCallback? onUnityGalleryStateChange;
 
   /// WebGL url source.
   final String? webUrl;
@@ -174,7 +179,7 @@ class _UnityWidgetState extends State<UnityWidget> {
           Text('Placeholder mode enabled, no native code will be called');
     }
 
-    return UnityWidgetPlatform.instance.buildViewWithTextDirection(
+    return WidgetPlatform.instance.buildViewWithTextDirection(
       _unityId,
       _onPlatformViewCreated,
       unityOptions: unityOptions,

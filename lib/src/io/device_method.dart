@@ -9,10 +9,9 @@ import 'package:flutter/services.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../helpers/events.dart';
-import '../helpers/misc.dart';
-import '../helpers/types.dart';
-import 'unity_widget_platform.dart';
-import 'windows_unity_widget_view.dart';
+import '../helpers/errors.dart';
+import '../helpers/scene_loaded.dart';
+import '../abstract_classes/facade_platform.dart';
 
 class MethodChannelUnityWidget extends UnityWidgetPlatform {
   // Every method call passes the int unityId
@@ -85,6 +84,11 @@ class MethodChannelUnityWidget extends UnityWidgetPlatform {
       case "events#onUnityMessage":
         _unityStreamController.add(UnityMessageEvent(unityId, call.arguments));
         break;
+      case "events#onUnityGalleryStateChange":
+        _unityStreamController.add(
+          UnityGalleryStateChangeEvent(unityId, call.arguments),
+        );
+        break;
       case "events#onUnityUnloaded":
         _unityStreamController.add(UnityLoadedEvent(unityId, call.arguments));
         break;
@@ -131,6 +135,13 @@ class MethodChannelUnityWidget extends UnityWidgetPlatform {
   }
 
   @override
+  Stream<UnityGalleryStateChangeEvent> onUnityGalleryStateChange({
+    required int unityId,
+  }) {
+    return _events(unityId).whereType<UnityGalleryStateChangeEvent>();
+  }
+
+  @override
   Stream<UnityLoadedEvent> onUnityUnloaded({required int unityId}) {
     return _events(unityId).whereType<UnityLoadedEvent>();
   }
@@ -164,24 +175,7 @@ class MethodChannelUnityWidget extends UnityWidgetPlatform {
 
     final Map<String, dynamic> creationParams = unityOptions;
 
-    if (defaultTargetPlatform == TargetPlatform.windows) {
-      return WindowsUnityWidgetView();
-    }
-
     if (defaultTargetPlatform == TargetPlatform.android) {
-      // commented for 3.0.0 changes in platform view rendition
-      // if (!useAndroidViewSurface) {
-      //   return AndroidView(
-      //     viewType: _viewType,
-      //     onPlatformViewCreated: onPlatformViewCreated,
-      //     gestureRecognizers: gestureRecognizers,
-      //     creationParams: creationParams,
-      //     creationParamsCodec: const StandardMessageCodec(),
-      //     hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-      //     layoutDirection: TextDirection.ltr,
-      //   );
-      // }
-
       return PlatformViewLink(
         viewType: _viewType,
         surfaceFactory: (
@@ -296,5 +290,27 @@ class MethodChannelUnityWidget extends UnityWidgetPlatform {
   @override
   Future<void> quitPlayer({required int unityId}) async {
     await channel(unityId).invokeMethod('unity#quitPlayer');
+  }
+
+  @override
+  Future<void> galleryProfileDidLoad({
+    required int unityId,
+    required Map<String, dynamic> message,
+  }) async {
+    await channel(unityId).invokeMethod(
+      "unity#galleryProfileDidLoad",
+      json.encode(message),
+    );
+  }
+
+  @override
+  Future<void> sneakersDidLoad({
+    required int unityId,
+    required Map<String, dynamic> message,
+  }) async {
+    await channel(unityId).invokeMethod(
+      "unity#sneakersDidLoad",
+      json.encode(message),
+    );
   }
 }

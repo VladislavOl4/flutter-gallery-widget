@@ -137,6 +137,18 @@ class FlutterUnityWidgetController(
                 UnityPlayerUtils.postMessage(gameObject, methodName, message)
                 result.success(true)
             }
+            "unity#sneakersDidLoad" -> {
+                invalidateFrameIfNeeded()
+                val message: String = methodCall.arguments as String;
+                UnityPlayerUtils.sneakersDidLoad(message)
+                result.success(true)
+            }
+            "unity#galleryProfileDidLoad" -> {
+                invalidateFrameIfNeeded()
+                val message: String = methodCall.arguments as String;
+                UnityPlayerUtils.galleryProfileDidLoad(message)
+                result.success(true)
+            }
             "unity#pausePlayer" -> {
                 invalidateFrameIfNeeded()
                 UnityPlayerUtils.pause()
@@ -199,6 +211,12 @@ class FlutterUnityWidgetController(
     override fun onMessage(message: String) {
         Handler(Looper.getMainLooper()).post {
             methodChannel.invokeMethod("events#onUnityMessage", message)
+        }
+    }
+
+    override fun onUnityGalleryStateChange(message: String) {
+        Handler(Looper.getMainLooper()).post {
+            methodChannel.invokeMethod("events#onUnityGalleryStateChange", message)
         }
     }
 

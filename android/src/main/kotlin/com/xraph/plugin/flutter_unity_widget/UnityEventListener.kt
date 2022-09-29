@@ -4,4 +4,6 @@ interface UnityEventListener {
     fun onMessage(message: String)
 
     fun onSceneLoaded(name: String, buildIndex: Int, isLoaded: Boolean, isValid: Boolean)
+
+    fun onUnityGalleryStateChange(message: String)
 }

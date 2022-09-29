@@ -14,7 +14,7 @@ public class FLTUnityWidgetController: NSObject, FLTUnityOptionsSink, FlutterPla
     private var viewId: Int64 = 0
     private var channel: FlutterMethodChannel?
     private weak var registrar: (NSObjectProtocol & FlutterPluginRegistrar)?
-    
+
     private var _disposed = false
 
     init(
@@ -71,6 +71,10 @@ public class FLTUnityWidgetController: NSObject, FLTUnityOptionsSink, FlutterPla
                 result(nil)
             } else if call.method == "unity#waitForUnity" {
                 result(nil)
+            } else if call.method == "unity#galleryProfileDidLoad" {
+                self.galleryProfileDidLoad(call: call, result: result)
+            } else if call.method == "unity#sneakersDidLoad" {
+                self.sneakersDidLoad(call: call, result: result)
             } else {
                 result(FlutterMethodNotImplemented)
             }
@@ -146,19 +150,51 @@ public class FLTUnityWidgetController: NSObject, FLTUnityOptionsSink, FlutterPla
 
         channel?.setMethodCallHandler(nil)
         removeViewIfNeeded()
-        
+
         _disposed = true
     }
-    
+
     /// Handles messages from unity in the current view
     func handleMessage(message: String) {
         self.channel?.invokeMethod("events#onUnityMessage", arguments: message)
     }
-    
-    
+
+    /// Handles messages about the orientation change event
+    func handleGalleryStateChange(message: String) {
+        self.channel?.invokeMethod("events#onUnityGalleryStateChange", arguments: message);
+    }
+
     /// Handles scene changed event from unity in the current view
     func handleSceneChangeEvent(info: Dictionary<String, Any>) {
         self.channel?.invokeMethod("events#onUnitySceneLoaded", arguments: info)
+    }
+    
+    func galleryProfileDidLoad(call: FlutterMethodCall, result: FlutterResult) {
+        guard let args = call.arguments else {
+            result("iOS could not recognize flutter arguments in method: (galleryProfileDidLoad)")
+            return
+        }
+
+        if let message = args as? String {
+            GetUnityPlayerUtils().galleryProfileDidLoad(unityMessage: message)
+        } else {
+            result(FlutterError(code: "-1", message: "iOS could not extract " +
+                   "flutter arguments in method: (galleryProfileDidLoad)", details: nil))
+        }
+    }
+
+    func sneakersDidLoad(call: FlutterMethodCall, result: FlutterResult) {
+        guard let args = call.arguments else {
+            result("iOS could not recognize flutter arguments in method: (sneakersDidLoad)")
+            return
+        }
+
+        if let message = args as? String {
+            GetUnityPlayerUtils().sneakersDidLoad(unityMessage: message)
+        } else {
+            result(FlutterError(code: "-1", message: "iOS could not extract " +
+                   "flutter arguments in method: (sneakersDidLoad)", details: nil))
+        }
     }
     
     /// Post messages to unity from flutter

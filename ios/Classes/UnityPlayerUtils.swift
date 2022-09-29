@@ -96,6 +96,7 @@ var sharedApplication: UIApplication?
             controller = self.ufw?.appController()
             controller?.unityMessageHandler = self.unityMessageHandlers
             controller?.unitySceneLoadedHandler = self.unitySceneLoadedHandlers
+            controller?.unityGalleryStateChangeHandler = self.unityGalleryStateChangeHandlers
             self.ufw?.appController()?.window?.windowLevel = UIWindow.Level(UIWindow.Level.normal.rawValue - 1)
         }
         _isUnityLoaded = true
@@ -240,6 +241,18 @@ var sharedApplication: UIApplication?
         self._isUnityLoaded = false
     }
 
+    func galleryProfileDidLoad(unityMessage: String?) {
+        if self.unityIsInitiallized() {
+            self.ufw?.galleryProfileDidLoad(unityMessage)
+        }
+    }
+
+    func sneakersDidLoad(unityMessage: String?) {
+        if self.unityIsInitiallized() {
+            self.ufw?.sneakersDidLoad(unityMessage)
+        }
+    }
+
     // Post message to unity
     func postMessageToUnity(gameObject: String?, unityMethodName: String?, unityMessage: String?) {
         if self.unityIsInitiallized() {
@@ -257,6 +270,18 @@ var sharedApplication: UIApplication?
                 c.handleMessage(message: String(utf8String: strMsg) ?? "")
             } else {
                 c.handleMessage(message: "")
+            }
+        }
+
+    }
+
+    func unityGalleryStateChangeHandlers(_ message: UnsafePointer<Int8>?) {
+
+        for c in globalControllers {
+            if let strMsg = message {
+                c.handleGalleryStateChange(message: String(utf8String: strMsg) ?? "")
+            } else {
+                c.handleGalleryStateChange(message: "")
             }
         }
 
